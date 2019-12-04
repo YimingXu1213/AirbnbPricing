@@ -85,7 +85,7 @@ function createVis() {
         .text("Room Type").attr("x",-100).attr("y", -20);
 
     // histogram for price
-    barcharts.push(new BarChart("price-histogram", allData.listings, "price"));
+    // barcharts.push(new BarChart("price-histogram", allData.listings, "price"));
 
 }
 
