@@ -16,39 +16,26 @@ var barcharts = [];
 loadData();
 
 function loadData() {
-    // d3.json("data/uk-household-purchases.json", function(error, jsonData){
-    //     if(!error){
-    //         allData = jsonData;
-    //
-    //         // Convert Pence Sterling (GBX) to USD and years to date objects
-    //         allData.layers.forEach(function(d){
-    //             for (var column in d) {
-    //                 if (d.hasOwnProperty(column) && column != "Year") {
-    //                     d[column] = parseFloat(d[column]) * 1.481105 / 100;
-    //                 } else if(d.hasOwnProperty(column) && column == "Year") {
-    //                     d[column] = parseDate(d[column].toString());
-    //                 }
-    //             }
-    //         });
-    //
-    //         allData.years.forEach(function(d){
-    //             d.Expenditures = parseFloat(d.Expenditures) * 1.481105 / 100;
-    //             d.Year = parseDate(d.Year.toString());
-    //         });
-    //
-    //         // Update color scale (all column headers except "Year")
-    //         // We will use the color scale later for the stacked area chart
-    //         colorScale.domain(d3.keys(allData.layers[0]).filter(function(d){ return d != "Year"; }))
-    //
-    //         createVis();
-    //     }
-    // });
 
     d3.csv("data/listings.csv", function(data){
 
+        // data cleaning- format
+        data = data.filter(function(d){
+            return (d.bathrooms!=="0")&(d.bedrooms!=="")&(d.beds!=="0")&(d.bathrooms!=="")&(d.bathrooms!=="0.5")
+        })
         data.forEach(function(d){
             d.longitude = parseFloat(d.longitude);
-            d.latitude = parseFloat(d.latitude)
+            d.latitude = parseFloat(d.latitude);
+            if(parseInt(d.bedrooms)>=3){
+                d.bedrooms = "3+"
+            }
+            if(parseInt(d.beds)>=3){
+                d.beds = "3+"
+            }
+            if(parseFloat(d.bathrooms)>2){
+                d.bathrooms = "2.5+"
+            }
+
         });
         allData.listings = data;
 
@@ -66,8 +53,15 @@ function loadData() {
 function createVis() {
 
 	// Instantiate visualization objects
+    stationMap = new StationMap('map-area', allData.listings, [42.358990, -71.058632]);
+
+
+
+
+
+    // previous
     // boston map
-    mapchart = new MapChart("map-area", allData);
+    // mapchart = new MapChart("map-area", allData);
 
     // bars as filters on the right
     barcharts.push(new BarChart("bar-area", allData.listings, "bedrooms"));

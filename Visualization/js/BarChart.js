@@ -23,13 +23,13 @@ BarChart = function(_parentElement, _data, _config){
 BarChart.prototype.initVis = function(){
     var vis = this;
 
-    vis.margin = { top: 60, right: 60, bottom: 0, left: 100 };
+    vis.margin = { top: 40, right: 60, bottom: 0, left: 100 };
     // Get current width
     var Width = $("#" + vis.parentElement).width();
     // Set min width so that layout won't break
     document.getElementById(vis.parentElement).style.minWidth = Width+"px";
     vis.width = Width - vis.margin.left - vis.margin.right,
-        vis.height = 200 - vis.margin.top - vis.margin.bottom;
+        vis.height = 140 - vis.margin.top - vis.margin.bottom;
 
     // * TO-DO *
     // SVG drawing area
@@ -96,6 +96,9 @@ BarChart.prototype.updateVis = function(){
     // (1) Update domains
     vis.x.domain([0, d3.max(vis.displayData, d=>d.value)]);
     vis.y.domain(vis.displayData.map(d=>d.key));
+    vis.displayData.forEach(function(d){
+        d['feature'] = vis.config;
+    })
     console.log(vis.displayData);
 
     // (2) Draw rectangles
@@ -107,12 +110,16 @@ BarChart.prototype.updateVis = function(){
         .merge(bars)
         .transition()
         .duration(1000)
-        .attr("fill", "darkseagreen")
+        .attr("fill", "#73BFBF")
         .attr("width", function(d){
             return vis.x(d.value)})
         .attr("height", vis.y.bandwidth())
         .attr("x", function(d){return 0})
         .attr("y", function(d){return vis.y(d.key)});
+
+    vis.svg.selectAll("rect").on("click",function(d){
+        console.log(d);
+    });
 
     bars.exit().remove();
 
@@ -141,6 +148,7 @@ BarChart.prototype.updateVis = function(){
         .transition()
         .duration(1000)
         .call(vis.yAxis);
+
 }
 
 
@@ -165,3 +173,4 @@ BarChart.prototype.selectionChanged = function(brushRegion){
     // Update the visualization
     vis.wrangleData();
 }
+
