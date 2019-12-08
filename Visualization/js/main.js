@@ -21,7 +21,7 @@ function loadData() {
 
         // data cleaning- format
         data = data.filter(function(d){
-            return (d.bathrooms!=="0")&(d.bedrooms!=="")&(d.beds!=="0")&(d.bathrooms!=="")&(d.bathrooms!=="0.5")
+            return (d.bathrooms!=="0")&(d.bedrooms!=="")&(d.beds!=="0")&(d.bathrooms!=="")&(d.bathrooms!=="0.5")&(d.room_type!=="Hotel room")
         })
         data.forEach(function(d){
             d.longitude = parseFloat(d.longitude);
@@ -35,6 +35,7 @@ function loadData() {
             if(parseFloat(d.bathrooms)>2){
                 d.bathrooms = "2.5+"
             }
+            d.price = parseInt(d.price.substring(1,d.price.length))
 
         });
         allData.listings = data;
@@ -79,7 +80,7 @@ function createVis() {
         .text("Room Type").attr("x",-100).attr("y", -20);
 
     // histogram for price
-    // barcharts.push(new BarChart("price-histogram", allData.listings, "price"));
+    priceDist = new PriceDistribution("price-histogram", allData.listings);
 
 }
 
@@ -91,10 +92,19 @@ function brushed() {
     var selectionRange = d3.brushSelection(d3.select(".brush").node());
 
     // Convert the extent into the corresponding domain values
-    var selectionDomain = selectionRange.map(timeline.x.invert);
+    var selectionDomain = selectionRange.map(priceDist.x.invert);
+    console.log(selectionDomain);
 
     // Update focus chart (detailed information)
-    areachart.x.domain(selectionDomain);
-    areachart.wrangleData();
+    barcharts.forEach(function(barchart){
+        barchart.displayData = barchart.data.filter(function(d){
+            return (d.price < selectionDomain[1])&(d.price > selectionDomain[0]);
+        })
+        barchart.wrangleData();
+    })
+    stationMap.wrangleData(selectionDomain);
+
+    // priceDist.x.domain(selectionDomain);
+    // priceDist.wrangleData();
 
 }

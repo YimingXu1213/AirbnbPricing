@@ -4,7 +4,7 @@
 
 #map-area {
   width: 100%;
-  height: 600px;
+  height: 480px;
 }
 
 /******** bars *************/
@@ -16,6 +16,20 @@
   fill-opacity: 70%;
   /*fill: #F28D95;*/
   /*fill: lightcoral;*/
+}
+
+/*.selected {*/
+/*  fill: lightcoral;*/
+/*}*/
+
+/*price distribution*/
+path {
+  fill: lightcoral;
+  fill-opacity: 70%;
+  stroke: lightcoral;
+}
+.axis-label {
+  font-size: 14px;
 }
 
 
