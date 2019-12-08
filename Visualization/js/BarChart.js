@@ -119,6 +119,16 @@ BarChart.prototype.updateVis = function(){
 
     vis.svg.selectAll("rect").on("click",function(d){
         console.log(d);
+        if(filteringPrice[d.feature].includes(d.key)){
+            filteringPrice[d.feature] = filteringPrice[d.feature].filter(function(e) { return e !== d.key })
+            this.style.fill="#73BFBF";
+        }else {
+            filteringPrice[d.feature].push(d.key);
+            this.style.fill="lightcoral";
+        }
+        console.log(filteringPrice);
+        priceDist.wrangleData();
+        stationMap.wrangleData();
     });
 
     bars.exit().remove();
@@ -173,4 +183,5 @@ BarChart.prototype.selectionChanged = function(brushRegion){
     // Update the visualization
     vis.wrangleData();
 }
+
 

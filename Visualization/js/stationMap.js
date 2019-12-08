@@ -53,11 +53,26 @@ StationMap.prototype.initVis = function() {
  *  Data wrangling
  */
 
-StationMap.prototype.wrangleData = function() {
+StationMap.prototype.wrangleData = function(priceRange) {
 	var vis = this;
 
-	// Currently no data wrangling/filtering needed
-	vis.displayData = vis.data;
+	// filter displayData
+	var features = ["bedrooms","beds","bathrooms","room_type"];
+
+	vis.displayData = vis.data.filter(function(d){
+		var mask = true;
+		// filter by barcharts
+		features.forEach(function(f){
+			if(filteringPrice[f].length > 0){
+				mask = mask & filteringPrice[f].includes(d[f])
+			}
+		});
+		// filter by area chart
+		if(priceRange){
+			mask = mask &(d.price < priceRange[1])&(d.price > priceRange[0]);
+		}
+		return mask;
+	})
 
 	// Update the visualization
 	vis.updateVis();
@@ -71,14 +86,18 @@ StationMap.prototype.wrangleData = function() {
 
 StationMap.prototype.updateVis = function() {
 	var vis = this;
-	console.log(vis.displayData)
+	console.log(vis.displayData);
+	// remove old layer
+	if(vis.myRenderer){
+		vis.map.removeLayer(vis.myRenderer);
+	}
 
-	var myRenderer = L.canvas({ padding: 0.5 });
+	vis.myRenderer = L.canvas({ padding: 0.5 });
 	vis.stations = L.layerGroup().addTo(vis.map);
 	vis.displayData.forEach(function(d){
 		// var popUpContent = '<strong>'+d.name+'</strong><br/>'+d.nbBikes+' bike(s) available<br/>>' + d.nbEmptyDocks+' empty docks';
 		var marker = L.circleMarker([d.latitude, d.longitude],{
-			renderer: myRenderer,
+			renderer: vis.myRenderer,
 			color: '#F25764',
 			radius: 3,
 			opacity: 0.7

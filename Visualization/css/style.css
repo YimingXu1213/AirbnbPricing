@@ -18,6 +18,20 @@
   /*fill: lightcoral;*/
 }
 
+/*.selected {*/
+/*  fill: lightcoral;*/
+/*}*/
+
+/*price distribution*/
+path {
+  fill: lightcoral;
+  fill-opacity: 70%;
+  stroke: lightcoral;
+}
+.axis-label {
+  font-size: 14px;
+}
+
 
 /*#map-area svg{*/
 /*  fill: darkcyan;*/
