@@ -41,10 +41,10 @@ PriceDistribution = function(_parentElement, _data){
 PriceDistribution.prototype.initVis = function(){
     var vis = this; // read about the this
 
-    vis.margin = {top: 80, right: 0, bottom: 30, left: 60};
+    vis.margin = {top: 50, right: 0, bottom: 30, left: 60};
 
     vis.width = 800 - vis.margin.left - vis.margin.right,
-        vis.height = 250 - vis.margin.top - vis.margin.bottom;
+        vis.height = 170 - vis.margin.top - vis.margin.bottom;
 
     // SVG drawing area
     vis.svg = d3.select("#" + vis.parentElement).append("svg")

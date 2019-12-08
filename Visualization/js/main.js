@@ -21,7 +21,7 @@ function loadData() {
 
         // data cleaning- format
         data = data.filter(function(d){
-            return (d.bathrooms!=="0")&(d.bedrooms!=="")&(d.beds!=="0")&(d.bathrooms!=="")&(d.bathrooms!=="0.5")
+            return (d.bathrooms!=="0")&(d.bedrooms!=="")&(d.beds!=="0")&(d.bathrooms!=="")&(d.bathrooms!=="0.5")&(d.room_type!=="Hotel room")
         })
         data.forEach(function(d){
             d.longitude = parseFloat(d.longitude);

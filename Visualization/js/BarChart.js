@@ -23,13 +23,13 @@ BarChart = function(_parentElement, _data, _config){
 BarChart.prototype.initVis = function(){
     var vis = this;
 
-    vis.margin = { top: 40, right: 60, bottom: 0, left: 100 };
+    vis.margin = { top: 35, right: 60, bottom: 0, left: 100 };
     // Get current width
     var Width = $("#" + vis.parentElement).width();
     // Set min width so that layout won't break
     document.getElementById(vis.parentElement).style.minWidth = Width+"px";
     vis.width = Width - vis.margin.left - vis.margin.right,
-        vis.height = 140 - vis.margin.top - vis.margin.bottom;
+        vis.height = 115 - vis.margin.top - vis.margin.bottom;
 
     // * TO-DO *
     // SVG drawing area
@@ -68,16 +68,18 @@ BarChart.prototype.wrangleData = function(){
     var vis = this;
 
     // (1) Group data by key variable (e.g. 'electricity') and count leaves
-    // (2) Sort columns descending
-
-
-    // * TO-DO *
     vis.displayData = d3.nest()
         .key(function(d) { return d[vis.config]; })
         .rollup(function(leaves) { return leaves.length; })
         .entries(vis.displayData);
-    vis.displayData.sort(function(a,b){return a.key - b.key});
 
+    // (2) fix column sequence by sorting key
+    console.log(vis.displayData);
+    vis.displayData.sort(function(a,b){
+        if(b.key > a.key){return -1}
+        if(b.key < a.key){return 1}
+    });
+    console.log("displayData after sort "+vis.config);
     console.log(vis.displayData);
     // Update the visualization
     vis.updateVis();
@@ -117,6 +119,7 @@ BarChart.prototype.updateVis = function(){
         .attr("x", function(d){return 0})
         .attr("y", function(d){return vis.y(d.key)});
 
+    // selection and filter
     vis.svg.selectAll("rect").on("click",function(d){
         console.log(d);
         if(filteringPrice[d.feature].includes(d.key)){
