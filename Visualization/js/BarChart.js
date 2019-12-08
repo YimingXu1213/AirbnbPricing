@@ -74,13 +74,11 @@ BarChart.prototype.wrangleData = function(){
         .entries(vis.displayData);
 
     // (2) fix column sequence by sorting key
-    console.log(vis.displayData);
     vis.displayData.sort(function(a,b){
         if(b.key > a.key){return -1}
         if(b.key < a.key){return 1}
     });
-    console.log("displayData after sort "+vis.config);
-    console.log(vis.displayData);
+
     // Update the visualization
     vis.updateVis();
 }
