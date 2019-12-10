@@ -108,3 +108,30 @@ function brushed() {
     // priceDist.wrangleData();
 
 }
+//
+// $(".viz").on("click", function(){
+//     filteringPrice = {"bedrooms":[],"beds":[],"bathrooms":[],"room_type":[]};
+//
+//     console.log("reset");
+//     barcharts.forEach(function(barchart){
+//         barchart.displayData = barchart.data;
+//         barchart.wrangleData();
+//     });
+//     stationMap.wrangleData();
+//     priceDist.wrangleData();
+//
+// })
+
+$("#reset").on("click", function(){
+    filteringPrice = {"bedrooms":[],"beds":[],"bathrooms":[],"room_type":[]};
+
+    console.log("reset");
+    barcharts.forEach(function(barchart){
+        barchart.displayData = barchart.data;
+        barchart.wrangleData();
+        barchart.svg.selectAll("rect").style("fill", "#73BFBF");
+    });
+    stationMap.wrangleData();
+    priceDist.wrangleData();
+
+})

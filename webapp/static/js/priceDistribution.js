@@ -41,9 +41,10 @@ PriceDistribution = function(_parentElement, _data){
 PriceDistribution.prototype.initVis = function(){
     var vis = this; // read about the this
 
-    vis.margin = {top: 50, right: 0, bottom: 30, left: 60};
+    vis.margin = {top: 50, right: 0, bottom: 30, left: 40};
+    var Width = $("#" + vis.parentElement).width();
 
-    vis.width = 800 - vis.margin.left - vis.margin.right,
+    vis.width = Width - vis.margin.left - vis.margin.right,
         vis.height = 170 - vis.margin.top - vis.margin.bottom;
 
     // SVG drawing area
@@ -96,7 +97,7 @@ PriceDistribution.prototype.initVis = function(){
         .append("text")
         .attr("class", "axis-label")
         .attr("x", vis.width-50)
-        .attr("y", vis.height+15)
+        .attr("y", vis.height+30)
         .text("Price");
 
     vis.svg.append("text")
@@ -110,7 +111,7 @@ PriceDistribution.prototype.initVis = function(){
         .attr("class", "title")
         .attr("x", -33)
         .attr("y", -30)
-        .text("Price Difference");
+        .text("Single Night Price Distribution");
 
 
     // (Filter, aggregate, modify data)
@@ -136,6 +137,7 @@ PriceDistribution.prototype.wrangleData = function(){
     // update x domain before generating bins
     vis.x.domain(d3.extent(vis.displayData, function(d) { return d.price; }));
 
+    // generate bins for distribution
     vis.bins = vis.x.ticks(25);
 
     vis.binnedData = d3.histogram()
@@ -143,10 +145,27 @@ PriceDistribution.prototype.wrangleData = function(){
         .value(function(d) { return d.price; })
         (vis.displayData);
 
+    // cut long tail in the distribution
+    console.log(vis.displayData.length);
+    var sum = 0;
+    vis.binnedData.forEach(function(d){
+        sum += d.length;
+        if (sum >= 0.95*vis.displayData.length){
+            d.length = 0;
+        }
+    });
+    vis.binnedData = vis.binnedData.filter(d=>d.length!==0);
+
     vis.binnedData.unshift({x0:0,x1:0,length:0});
 
     console.log("binned Data");
     console.log(vis.binnedData);
+
+    // update domain
+    var last_bin = vis.binnedData[vis.binnedData.length-1];
+    vis.x.domain([0,(last_bin.x1+last_bin.x0)/2]);
+
+
 
     // Update the visualization
     vis.updateVis();
@@ -182,53 +201,9 @@ PriceDistribution.prototype.updateVis = function(){
         .duration(1000)
         .attr("d", vis.area);
 
-    // path.exit().remove();
-
-    // // (2) Draw rectangles
-    // var bars = vis.svg.selectAll("rect")
-    //     .data(vis.displayData);
-    //
-    // bars.enter()
-    //     .append("rect")
-    //     .merge(bars)
-    //     .transition()
-    //     .duration(1000)
-    //     .attr("fill", "#73BFBF")
-    //     .attr("width", function(d){
-    //         return vis.x(d.value)})
-    //     .attr("height", vis.y.bandwidth())
-    //     .attr("x", function(d){return 0})
-    //     .attr("y", function(d){return vis.y(d.key)});
-    //
-    // vis.svg.selectAll("rect").on("click",function(d){
-    //     console.log(d);
-    // });
-    //
-    // bars.exit().remove();
-
-    // // (3) Draw labels
-    // var labels = vis.svg.selectAll("text.bar-label")
-    //     .data(vis.displayData);
-    //
-    // labels.enter()
-    //     .append("text")
-    //     .merge(labels)
-    //     .transition()
-    //     .duration(1000)
-    //     .attr("class","bar-label")
-    //     .attr("x", function(d){return vis.x(d.value)})
-    //     .attr("y", function(d){return vis.y(d.key) + 0.5*vis.y.bandwidth()})
-    //     .attr("font-size", 11)
-    //     .text(function(d){
-    //         return d.value;
-    //     })
-    //     .attr("alignment-baseline", "middle");
-    //
-    // labels.exit().remove();
-
     // Update axis
     vis.svg.select(".x-axis")
-        .call(vis.xAxis);
+        .call(vis.xAxis.tickFormat(d=>"$"+d));
 
     vis.svg.select(".y-axis")
         .transition()

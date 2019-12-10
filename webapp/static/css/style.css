@@ -138,7 +138,7 @@
 
 #map-area {
   width: 100%;
-  height: 480px;
+  height: 470px;
 }
 
 /******** bars *************/
@@ -194,6 +194,17 @@ h2 {
   margin-bottom: 40px;
 }
 
+.viz {
+  text-align: left;
+}
+#intro-viz {
+  margin-bottom: 20px;
+}
+#hint {
+  margin: 10px;
+  margin-top: 40px;
+}
+
 .container-fluid {
 	padding-right: 30px;
 	padding-left: 30px;
@@ -222,4 +233,17 @@ h2 {
   stroke: #fff;
   fill-opacity: .125;
   shape-rendering: crispEdges;
+}
+
+.btn {
+  /*margin: 15px;*/
+  /*margin-left: 0px;*/
+  border-radius: 8px;
+  background-color: white;
+  color: lightcoral;
+}
+
+.btn:hover {
+  background-color: lightcoral;
+  color: white;
 }
