@@ -95,13 +95,13 @@ StationMap.prototype.updateVis = function() {
 	vis.myRenderer = L.canvas({ padding: 0.5 });
 	vis.stations = L.layerGroup().addTo(vis.map);
 	vis.displayData.forEach(function(d){
-		// var popUpContent = '<strong>'+d.name+'</strong><br/>'+d.nbBikes+' bike(s) available<br/>>' + d.nbEmptyDocks+' empty docks';
+		var popUpContent = '<strong>'+d.name+'</strong><br/>'+d.room_type+'<br/>' + d.bedrooms+' bedrooms,'+ d.beds+' beds'+'<br/>' + d.bathrooms+' bathrooms';
 		var marker = L.circleMarker([d.latitude, d.longitude],{
 			renderer: vis.myRenderer,
 			color: '#F25764',
 			radius: 3,
 			opacity: 0.7
-		}).addTo(vis.map); //.bindPopup(popUpContent)
+		}).bindPopup(popUpContent).addTo(vis.map); //.bindPopup(popUpContent)
 		vis.stations.addLayer(marker);
 	})
 
