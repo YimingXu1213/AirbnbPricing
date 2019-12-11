@@ -1,6 +1,0 @@
-flask
-pandas
-numpy
-sklearn
-waitress
-gunicorn
