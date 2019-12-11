@@ -30,8 +30,8 @@ pip3 install -r requirements.txt
 To run our code, navigate into the `webapp` folder unzip the 2 files in the command line:
 
 ```
-unzip cleanData.csv.zip
-unzip rf.sav.zip
+unzip model/cleanData.csv.zip -d model
+unzip model/rf.sav.zip -d model
 ```
 After unzipping the files, initialize our webapp by using the following command:
 ```
