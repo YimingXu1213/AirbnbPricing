@@ -94,13 +94,32 @@
 
         <div class = 'row'>
             <div class="col-md-12">
-                <br><h1 class = 'sub_title' id = 'sub_wordCloud'>Secrets Under Reviews</h1></br>
+                <br><h1 class = 'sub_title' id = 'sub_wordCloud'>Secrets Under Reviews</h1>
+                <div id = 'hint' style='text-align: left;'>
+                    The word cloud below provides the host with a general sense of what those guests who travel to this area seem to care the most about. 
+                </div></br>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12" id="wordcloud"></div>
+            <div class="col-md-12" style='text-align: left;'>
+                Location seems to be the determining factor to the customers’ experience, as we see that ‘location’ is one of the most frequent keywords, and we also see ‘close’, ‘walk’, and ‘walking’ among the top words. We can then infer that it is a huge plus for customers if the Airbnb is within walking distance to a commercial district or a transportation center. Moreover, these keywords reveal customers’ attention to factors that are hard to quantify, as in the reviews, customers often talk about whether the place is ‘clean’, ‘comfortable’, and ‘quiet’. From the words ‘easy’ and ‘check’, we speculate that the smoothness of the check-in process also greatly contributes to the customers’ overall satisfaction. Note that ‘host’ is also one of the keywords, which probably refers to the hosts’ communication and hospitality. Lastly, although Airbnb is typically for infrequent travelers, good experience can certainly bring back more customers, as customers often leave reviews like ‘they would “highly” “recommend” the place’, or that ‘they would come “back” “again”’.
+            </div></br>
+
+            <div class="col-md-12" style='text-align: left; font-weight:bold;'>
+               <br>Our Suggestions for New Hosts</br>
+            </div>
+
+            <div class="col-md-12" style='text-align: left;'>
+                <li>If you are searching for properties to purchase and start an Airbnb business, it would be best if the property is at a convenient location with a quiet neighborhood. </li>
+                <li>It would be great if you mindfully keep the place clean and comfortable and make the check-in process easy for the customers. </li>
+                <li>Please be responsive and informative in communications, and you could even give sight-seeing recommendations to show hospitality. </li>
+                
+            </div>
         </div>
+
+
 
         <div class = 'row'>
             <div class="col-md-12">
@@ -227,11 +246,11 @@
                                 <td><input type="checkbox" name="Smoke detector" value = '1' checked>   Smoke detector</td>
                                 <td><input type="checkbox" name="Microwave" value = '1' checked>   Microwave</td>                               
                                 <td><input type="checkbox" name="Washer" value = '1' checked>   Washer</td>
-                                <td><input type="checkbox" name="Wifi" id = 'Wifi' value='1'>   Wifi</td> 
+                                <td><input type="checkbox" name="Wifi" id = 'Wifi' value='1' checked>   Wifi</td> 
                             </tr>
                             <tr>
-                                <td><input type="checkbox" name="Air conditioning" value = '1'>   Air conditioning</td>
-                                <td><input type="checkbox" name="Hot water" value = '1'>   Hot water</td>
+                                <td><input type="checkbox" name="Air conditioning" value = '1' checked>   Air conditioning</td>
+                                <td><input type="checkbox" name="Hot water" value = '1' checked>   Hot water</td>
                                 <td><input type="checkbox" name="Heating" value = '1' checked>   Heating</td>
                                 <td><input type="checkbox" name="Iron" value = '1' checked>   Iron</td>
                             </tr>
@@ -297,22 +316,25 @@
                 {% endif %}
             </div>
             <br></br>
+            {% if recommend %}
             <div class = "col-md-5">
-                {% if recommend %}
+                
                         <p style = 'font-size:30px'><br><b>Tips</b></br></p>
                         {% for amenity, money in recommend.items() %}
                         <p>You can make additional <span class="highlightmoney">${{money}}</span> daily on average</br> if you install <span class="highlightamenity">{{amenity}}</span></p>
                         {% endfor %}
                     </table>
-                {% endif %}
+                
             </div>
+            {% endif %}
+            {% if no_recommend %}
             <div class = "col-md-5">
-                {% if no_recommend %}
+                
                         <p style = 'font-size:30px'><br><b>Tips</b></br></p>
                         <p>Your property is already well equipped ^_^ We have no further suggestions on amenities.</p>
                     </table>
-                {% endif %}
             </div>
+            {% endif %}
     
         </div>
 
