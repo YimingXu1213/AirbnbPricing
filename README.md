@@ -85,6 +85,6 @@ README.md
 requirements.txt
 
 ```
-In Model folder, we have the notebooks including data preprocessing, EDA and modeling.
-In Reports folder, we have written reports including proposal and midterm.
+In Model folder, we have the notebooks including data preprocessing, EDA and modeling.</br>
+In Reports folder, we have written reports including proposal and midterm.</br>
 In webapp folder, which is also our final deliverable, we have the flask python file in app.py, page file in templates and other website support files in static and model. 
