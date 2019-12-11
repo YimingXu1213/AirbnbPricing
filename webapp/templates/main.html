@@ -1,0 +1,378 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>MIT6.S080 Final Project</title>
+
+	<!-- Load Google Font -->
+	<link href='https://fonts.googleapis.com/css?family=Roboto:100,400,300,400italic,700' rel='stylesheet' type='text/css'>
+
+	<!-- CSS libraries -->
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../static/css/leaflet.css">
+
+	<!-- Custom CSS code -->
+	<link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- Title -->
+                <div class = 'title' >
+                    <h1 style = 'font-size: 45px;'><b>Home.PI</b></h1>
+                    <h2><b>A friendly Pricing Intelligence for Airbnb Hosts</b></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class = 'row'>
+            <div class="col-md-4">
+                <div class = 'title_map'>
+                    <h1 class = 'sub_title_pic'><a href="#sub_comp" style="color:white">Explore Your Competitors</a>
+                        </h1>
+                    <h2></h2>
+                </div>
+            </div>
+            <div class='col-md-4'>
+                <div class = 'title_wordcloud'>
+                    <h1 class = 'sub_title_pic'><a href="#sub_wordCloud" style="color:white">Secrets Under Reviews</a></h1>
+                    <h2></h2>
+                </div>
+            </div>
+
+            <div class='col-md-4'>
+                <div class = 'title_model'>
+                    <h1 class = 'sub_title_pic'><a href="#sub_model" style="color:white">Your Personalized Pricing Intelligence</a></h1>
+                    {% if price %}
+                    <h2 style = 'text-align: right; margin-right:30px; color: rgb(192, 59, 59); font-family:Helvetica Neue; font-weight: bold; font-size: 15px;'><a href="#sub_report" style="color:rgb(192, 59, 59)">Your Report Is Ready!</a></h2>
+                    {% endif %}
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class = 'row'>
+            <div class="col-md-12">
+                <br><h1 class = 'sub_title' id="sub_comp">Explore Your Competitors</h1></br>
+            </div>
+        </div>
+
+        <div class="row viz">
+            <div class="col-md-12" id ='intro-viz'>
+            As a host, you might want to learn how Airbnb listing price could be affected by four of the most important factors: number of bedrooms, beds, bathrooms and room type. Each red circle on the map represents a listing in Boston/Cambridge, and the bar charts on the right show attributes of those listings. Below the map is the distribution of single night price of those listings.
+            </div>
+            <!-- Visualization placeholders -->
+            <div class="col-md-7">
+                <div id="map-area"></div>
+            </div>
+            <div class="col-md-5">
+                <div id="bar-area"></div>
+            </div>
+        </div>
+
+        <div class="row viz">
+            <!-- Visualization placeholders -->
+            <div class="col-md-7">
+                <div id="price-histogram"></div>
+            </div>
+            <div class="col-md-5" >
+                <div id="hint">
+                    Both the bar charts and the price distribution is filterable.
+                    <br>Click on any bar or brush on the distribution to filter listings.
+                    <br>Click on button to reset filters: <button type="button" class="btn" id="reset">Reset filter</button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class = 'row'>
+            <div class="col-md-12">
+                <br><h1 class = 'sub_title' id = 'sub_wordCloud'>Secrets Under Reviews</h1></br>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12" id="wordcloud"></div>
+        </div>
+
+        <div class = 'row'>
+            <div class="col-md-12">
+                <br><h1 class = 'sub_title' id = 'sub_model'>Your Personalized Pricing Intelligence</h1></br>
+            </div>
+        </div>
+
+        <form action="{{ url_for('main') }}" method='POST'>
+        <div class='fieldset'>
+                <legend>About Your Property</legend>
+            <div class = "row">
+                <div class="col-md-12" id="propertyTable">
+                    <table align = 'center' style = 'width:70%;'>
+                        <!-- 1. Date -->
+                        <tr> 
+                            <td> Start Date:</td>
+                            <td><input name='date_start' type="text" placeholder="2019/11/07" onfocus="(this.type='date')" value = {{date_start}}></td> 
+                            <td> End Date:</td>
+                            <td><input name='date_end' type="text" placeholder="2019/11/10" onfocus="(this.type='date')" value = {{date_end}}></td> 
+    
+                            <td>Zipcode:</td>
+                            <td><input name='zipcode' type="text" value = {{zipcode}}></td>
+                        </tr>
+                        <!-- 2. Location & Other Types -->
+                        <tr>    
+                            <td>Property Type:</td>
+                            <td>
+                                <select name="property_type">
+                                    <option value="Apartment" selected>Apartment</option>
+                                    <option value="Bed and breakfast">Bed and breakfast</option>
+                                    <option value="Boat">Boat</option>
+                                    <option value="Boutique hotel">Boutique hotel</option>
+                                    <option value="Bungalow">Bungalow</option>
+                                    <option value="Condominium">Condominium</option>
+                                    <option value="Guest suite">Guest suite</option>
+                                    <option value="Guesthouse">Guesthouse</option>
+                                    <option value="Hostel">Hostel</option>
+                                    <option value="Hotel">Hotel</option>
+                                    <option value="House">House</option>
+                                    <option value="Loft">Loft</option>
+                                    <option value="Serviced apartment">Serviced apartment</option>
+                                    <option value="Townhouse">Townhouse</option>
+                                    <option value="Villa">Villa</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </td>
+                                    
+                            <td>Room Type:</td>
+                            <td>
+                                <select name="room_type">
+                                    <option value="Entire home/apt" selected>Entire home/apt</option>
+                                    <option value="Hotel room">Hotel room</option>
+                                    <option value="Private room">Private room</option>
+                                    <option value="Shared room">Shared room</option>
+                                </select>
+                            </td>
+                            
+                            <td>Bed Type:</td>
+                            <td>
+                                <select name="bed_type">
+                                    <option value="Real Bed" selected>Real Bed</option>
+                                    <option value="Airbed" >Airbed</option>
+                                    <option value="Futon">Futon</option>
+                                    <option value="Pull-out Sofa">Pull-out Sofa</option>
+                                    
+                                </select>
+                            </td>                  
+                        </tr>
+                        <!-- 3. Number of Accommodates -->
+                        <tr>
+                            <td># Accommodates:</td>
+                            <td><input name='accommodates' type="number" min ='0' value = {{accommodates}}></td>
+                            
+                            <td># Guests Included:</td>
+                            <td><input name='guests_included' type="number" min ='0' value = {{guests_included}}></td>
+                                                
+                            <td># Extra People:</td>
+                            <td><input name='extra_people' type="number" min ='0' value = {{extra_people}}></td>  
+                        </tr>
+                        <!-- 4. Number of Rooms -->
+                        <tr>
+                            <td># Bathrooms:</td>
+                            <td><input name='bathrooms' type="number" min ='0' value = {{bathrooms}}></td>
+                                
+                            <td># Bedrooms:</td>
+                            <td><input name='bedrooms' type="number" min ='0' value = {{bedrooms}}></td>
+                        
+                            <td># Beds:</td>
+                            <td><input name='beds' type="number" min ='0' value = {{beds}}></td>
+                        </tr>
+                        <!-- 5. Other Kinds of Fees -->
+                        <tr>
+                            <td>Security Deposit:</td>
+                            <td><input name='security_deposit' type="number" min ='0' value = {{security_deposit}}></td>
+    
+                            <td>Cleaning Fee:</td>  
+                            <td><input name='cleaning_fee' type="number" min ='0' value = {{cleaning_fee}}></td>    
+                        </tr>
+                    </table></br>
+            </div>
+            
+            <div class = "row" id = 'amenities-personal'>
+                <div class = "col-md-8">
+                    <div class = 'amenities'>
+                        <h><b>Amenities</b></h><br>
+                        <table id = 'amenities-table'>
+                            <div id='checkbox-container'>
+                            <tr>
+                                    <!-- <input type="checkbox" name="txtCheck" value="your value" <?php if(isset($_POST['txtCheck'])) echo "checked='checked'"; ?>  /><br /> -->
+                                <td><input type="checkbox" name="Laptop friendly workspace" value = "1" checked>   Laptop friendly workspace</td>
+                                <td><input type="checkbox" name="Self check-in" value = '1' checked>   Self check-in</td>
+                                <td><input type="checkbox" name="Essentials" value = '1' checked>   Essentials</td>
+                                <td><input type="checkbox" name="Kitchen" value = '1' checked>   Kitchen</td>
+                                
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="Carbon monoxide detector" value = '1' checked>   Carbon monoxide detector</td>
+                                <td><input type="checkbox" name="Refrigerator" value = '1' checked>   Refrigerator</td>
+                                <td><input type="checkbox" name="Shampoo" value = '1' checked>   Shampoo</td>
+                                <td><input type="checkbox" name="Dryer" value = '1' checked>   Dryer</td>
+                                
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="Smoke detector" value = '1' checked>   Smoke detector</td>
+                                <td><input type="checkbox" name="Microwave" value = '1' checked>   Microwave</td>                               
+                                <td><input type="checkbox" name="Washer" value = '1' checked>   Washer</td>
+                                <td><input type="checkbox" name="Wifi" id = 'Wifi' value='1'>   Wifi</td> 
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="Air conditioning" value = '1'>   Air conditioning</td>
+                                <td><input type="checkbox" name="Hot water" value = '1'>   Hot water</td>
+                                <td><input type="checkbox" name="Heating" value = '1' checked>   Heating</td>
+                                <td><input type="checkbox" name="Iron" value = '1' checked>   Iron</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" name="Fire extinguisher" value = '1' checked>   Fire extinguisher</td>
+                                <td><input type="checkbox" name="Hair dryer" value = '1' checked>   Hair dryer</td>
+                                <td><input type="checkbox" name="Hangers" value = '1' checked>   Hangers</td>                            
+                                <td><input type="checkbox" name="TV" value = '1' checked>   TV</td>
+                            </tr>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+                <div class = "col-md-4">
+                    <div class = 'personal_preference'>
+                        <h><b>Personal Preference</b></h></br>
+                        Risk Preference:</br>
+                        The minimum booking probability: 
+                        <input name='prob_lower' type="number"  min = '0' max = '100' value = {{prob_lower}}> [0-100]
+                        <br>Pricing Preference:</br>
+                        <input type="radio" name="dynamic" value="0"> Static Pricing
+                        <input type="radio" name="dynamic" value="1" checked> Dynamic Pricing
+                    </div>
+                </div>
+            </div>
+            </div>
+                <input type='submit' id = 'submit' value = 'Get Started' class="btn btn-primary btn-customized" ></br>
+            </div>
+        </form>   
+        {% if price %}
+        <div class = 'row'>
+            <div class="col-md-12">
+                <br><h1 class = 'sub_title' id = 'sub_report'>Your Personalized Report</h1></br>
+            </div>
+        </div>
+
+        <div class = 'row'>
+            <div class = 'col-md-12'>
+                <div class='model_report'></div>
+            </div>
+        </div>
+        {% endif %}
+    
+        <div class="row">
+            <div class = "col-md-7">
+                {% if price %}
+                    <p style = 'font-size:30px'><br><b>Pricing Suggestion</b></br></p>
+                        <table style="width:90%; text-align: center;">
+                            <tr>
+                                <th>Date</th>
+                                <th>Suggested Price ($)</th> 
+                            </tr>
+                            {% for variable, value in price.items() %}
+                            <tr>
+                                <td>{{ variable }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table></br>
+                {% endif %}
+                {% if earning %}
+                    <p>You are expected to earn <span class="highlightearning">${{earning}}</span> in total with our suggested pricing.</p>
+                {% endif %}
+            </div>
+            <br></br>
+            <div class = "col-md-5">
+                {% if recommend %}
+                        <p style = 'font-size:30px'><br><b>Tips</b></br></p>
+                        {% for amenity, money in recommend.items() %}
+                        <p>You can make additional <span class="highlightmoney">${{money}}</span> daily on average</br> if you install <span class="highlightamenity">{{amenity}}</span></p>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            </div>
+            <div class = "col-md-5">
+                {% if no_recommend %}
+                        <p style = 'font-size:30px'><br><b>Tips</b></br></p>
+                        <p>Your property is already well equipped ^_^ We have no further suggestions on amenities.</p>
+                    </table>
+                {% endif %}
+            </div>
+    
+        </div>
+
+        <div class='row'>
+            <div class="col-md-12">
+                <div class='final_word'>
+                    <h1 class='final_title'>Contact Us</h1>
+                    <h2 class='authors'><a href='https://www.linkedin.com/in/yiming-xu-96378717a/' class='author'>Yiming Xu</a></br>   
+                        <a href='https://www.linkedin.com/in/rong-liu-407886a6/' class='author'>   Rong Liu</a></br>
+                        <a href= 'https://www.linkedin.com/in/shu-xu/' class='author'>   Shu Xu</a></h2>
+                    <h3 class='coursename'>MIT 6.S080</h3>
+                </div>
+            </div>
+
+
+        </div>
+    </div> 
+        
+        
+    <!-- Load JS libraries -->
+
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/popper.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/d3.min.js"></script>
+    <script src="../static/js/d3.layout.cloud.js"></script>
+	<script src="../static/js/leaflet.js"></script>
+
+    <!-- Visualization objects -->
+    <script src="../static/js/stationMap.js"></script>
+    <script src="../static/js/mapchart.js"></script>
+    <script src="../static/js/barchart.js"></script>
+	<script src="../static/js/priceDistribution.js"></script>
+
+    <!-- Load data, create visualizations -->
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/wordcloud.js"></script>
+    <!-- <script>
+        $('[id="Laptop friendly workspace"]').prop('checked', {{Laptop_friendly}})
+        $('ID').css()
+    </script> -->
+    <script>
+        var checkboxValues = JSON.parse(localStorage.getItem('checkboxValues')) || {},
+            $checkboxes = $("#checkbox-container :checkbox");
+
+
+        $checkboxes.on("change", function(){
+        $checkboxes.each(function(){
+            checkboxValues[this.id] = this.checked;
+        });
+        
+        localStorage.setItem("checkboxValues", JSON.stringify(checkboxValues));
+        });
+
+        // On page load
+        $.each(checkboxValues, function(key, value) {
+        $("#" + key).prop('checked', value);
+        });
+    </script> 
+</body>
+  
+
+</html>
