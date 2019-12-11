@@ -214,7 +214,7 @@ class createModel():
                 price_suggestion = int(ub - (self.prob_lower - self.get_prob(testCase_X, lb))/0.01)
                 final_earning = price_suggestion * self.prob_lower * len(self.dates)
             final_pricing = pd.DataFrame([price_suggestion]*len(self.dates))
-            final_pricing.columns = ['Suggested Price']
+            final_pricing.columns = ['Price']
             final_pricing.index = self.dates
             print(final_pricing)
         return final_earning, final_pricing
