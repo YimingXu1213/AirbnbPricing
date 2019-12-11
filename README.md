@@ -53,7 +53,7 @@ Finally, in order to deactivate the virtual environment, use the following comma
 deactivate
 ```
 
-# Repo Structure
+## Repo Structure
 ```
 Model/                           
   data/
@@ -79,9 +79,12 @@ webapp/
     img/
     js/
   templates/
-    main.html
+    main.html                                      
     
 README.md
 requirements.txt
 
 ```
+In Model folder, we have the notebooks including data preprocessing, EDA and modeling.
+In Reports folder, we have written reports including proposal and midterm.
+In webapp folder, which is also our final deliverable, we have the flask python file in app.py, page file in templates and other website support files in static and model. 
