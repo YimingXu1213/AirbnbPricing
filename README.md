@@ -1,7 +1,7 @@
 # Home.PI
 Repo for MIT 6.S080 Final Project
 
-## How to Run
+## How to Run Our Code
 Clone or download our [GitHub repository](https://github.com/YimingXu1213/AirbnbPricing.git) and navigate into this directory in your terminal.
 
 Optional: create a virtual environment using `virtualenv`. This can be downloaded using `pip3` or `easy_install` as follows:
