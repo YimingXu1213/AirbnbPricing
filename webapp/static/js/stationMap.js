@@ -95,7 +95,7 @@ StationMap.prototype.updateVis = function() {
 	vis.myRenderer = L.canvas({ padding: 0.5 });
 	vis.stations = L.layerGroup().addTo(vis.map);
 	vis.displayData.forEach(function(d){
-		var popUpContent = '<strong>'+d.name+'</strong><br/>'+d.room_type+'<br/>' + d.bedrooms+' bedrooms,'+ d.beds+' beds'+'<br/>' + d.bathrooms+' bathrooms';
+		var popUpContent = '<strong>'+d.name+'</strong><br/>'+d.room_type+'<br/>' + d.bedrooms+' bedrooms, '+ d.beds+' beds'+'<br/>' + d.bathrooms+' bathrooms';
 		var marker = L.circleMarker([d.latitude, d.longitude],{
 			renderer: vis.myRenderer,
 			color: '#F25764',

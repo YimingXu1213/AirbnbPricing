@@ -106,21 +106,10 @@ function brushed() {
 
     // priceDist.x.domain(selectionDomain);
     // priceDist.wrangleData();
+    var format = d3.format(".1f");
+    priceDist.svg.select("text#price-range").text("Price range: "+format(selectionDomain[0]) + " to "+format(selectionDomain[1]) );
 
 }
-//
-// $(".viz").on("click", function(){
-//     filteringPrice = {"bedrooms":[],"beds":[],"bathrooms":[],"room_type":[]};
-//
-//     console.log("reset");
-//     barcharts.forEach(function(barchart){
-//         barchart.displayData = barchart.data;
-//         barchart.wrangleData();
-//     });
-//     stationMap.wrangleData();
-//     priceDist.wrangleData();
-//
-// })
 
 $("#reset").on("click", function(){
     filteringPrice = {"bedrooms":[],"beds":[],"bathrooms":[],"room_type":[]};

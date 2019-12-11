@@ -113,6 +113,14 @@ PriceDistribution.prototype.initVis = function(){
         .attr("y", -30)
         .text("Single Night Price Distribution");
 
+    vis.svg
+        .append("text")
+        .attr("class", "axis-label")
+        .attr("id","price-range")
+        .attr("x", vis.width-180)
+        .attr("y", 15)
+        .text("Price range");
+
 
     // (Filter, aggregate, modify data)
     vis.wrangleData();
@@ -165,7 +173,8 @@ PriceDistribution.prototype.wrangleData = function(){
     var last_bin = vis.binnedData[vis.binnedData.length-1];
     vis.x.domain([0,(last_bin.x1+last_bin.x0)/2]);
 
-
+    vis.svg.select("text#price-range")
+        .text("Price range: 0 to "+(last_bin.x1+last_bin.x0)/2);
 
     // Update the visualization
     vis.updateVis();
