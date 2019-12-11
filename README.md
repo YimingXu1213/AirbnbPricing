@@ -1,5 +1,8 @@
-# Home.PI
-Repo for MIT 6.S080 Final Project
+# Home.PI (MIT 6.S080 Final Project)
+Hi there, this is the repository for Home.PI, A friendly Pricing Intelligence for Airbnb Hosts. 
+
+
+
 
 ## How to Run Our Code
 Clone or download our [GitHub repository](https://github.com/YimingXu1213/AirbnbPricing.git) and navigate into this directory in your terminal.
@@ -50,4 +53,35 @@ Finally, in order to deactivate the virtual environment, use the following comma
 deactivate
 ```
 
+# Repo Structure
+```
+Model/                           
+  data/
+  ClassificationModel.ipynb
+  EDA.ipynb
+  midterm_EDA_baselineModel.ipynb
+  
+Reports/
+  Midterm_Report.pdf
+  Project_Proposal.pdf
+  
+webapp/
+  app.py
+  model/
+    clean.Data.csv.zip/
+    pythonFunctions.py
+    rf.sav.zip
+  static/
+    css/
+    data/
+    fonts/
+    image/
+    img/
+    js/
+  templates/
+    main.html
+    
+README.md
+requirements.txt
 
+```
