@@ -1,2 +1,42 @@
-# AirbnbPricing
+# Home.PI
 Repo for MIT 6.S080 Final Project
+
+## How to Run
+Clone or download our [GitHub repository](https://github.com/YimingXu1213/AirbnbPricing.git) and navigate into this directory in your terminal.
+
+Optional: create a virtual environment using `virtualenv`. This can be downloaded using `pip3` or `easy_install` as follows:
+
+```
+pip3 install virtualenv
+```
+
+or
+
+```
+sudo easy_install virtualenv
+```
+
+Then, create a virtual environment (using Python3), activate this virtual environment, and install the dependencies as follows:
+
+```
+virtualenv -p python3 my_env
+source my_env/bin/activate
+pip3 install -r requirements.txt
+```
+
+In order to deactivate the virtual environment, use the following command
+
+```
+deactivate
+```
+
+To initialize our webapp, navigate into the `webapp` folder and use the following command:
+```
+python3 app.py
+```
+
+After the page has been completely initialized, the terminal will return the following line:
+
+Serving on http://0.0.0.0:8080
+
+Open a browser and enter http://0.0.0.0:8080. The page should be sucessfully displayed.
