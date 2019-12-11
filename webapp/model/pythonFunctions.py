@@ -131,17 +131,22 @@ class createModel():
     
     def grid_search(self, testCase, cand_price, prob_lower):
         # calculate earning for each candidate price
+        cand_prob = []
         cand_earning = []
         for p in cand_price:
             prob = self.get_prob(testCase, p)
+            cand_prob.append(prob)
             cand_earning.append(p*prob)
-        return cand_earning
-    
+        cand_prob, cand_earning = np.array(cand_prob), np.array(cand_earning)
+        cand_price = cand_price[cand_prob >= self.prob_lower]
+        cand_earning = cand_earning[cand_prob >= self.prob_lower]
+        return cand_price, cand_prob[cand_prob >= self.prob_lower], cand_earning
+        
     def optimization(self):
         # dynamic
         if self.dynamic == 1:
             prices,book_rates,earnings = {},{},{}
-            for peak_month, weekend in set(self.date_properties.values()): 
+            for peak_month, weekend in set(self.date_properties.values()):
                 # update date properties
                 self.testBase.loc[0,'peak_month'] = peak_month
                 self.testBase.loc[0,'weekend'] = weekend
@@ -150,20 +155,27 @@ class createModel():
                 # generate list of candidate prices
                 if ub - lb <= 50: cand_price = np.arange(lb,ub+1,1)
                 else: cand_price = np.round(np.linspace(lb,ub,50))
-                # run grid search
-                cand_earning = self.grid_search(testCase_X, cand_price, self.prob_lower)
-                prices[(peak_month,weekend)] = cand_price[np.argmax(cand_earning)]
-                earnings[(peak_month,weekend)] = np.max(cand_earning)
+                # run grid search and filter by prob_lower
+                cand_price, _, cand_earning = self.grid_search(testCase_X, cand_price, self.prob_lower)
+                if len(cand_price) > 0:
+                    prices[(peak_month,weekend)] = cand_price[np.argmax(cand_earning)]
+                    earnings[(peak_month,weekend)] = np.max(cand_earning)
+                else: # interpolate is self.prob_lower cannot be satisfied
+                    interpolated_price = int(ub - (self.prob_lower - self.get_prob(testCase_X, lb))/0.01)
+                    prices[(peak_month,weekend)] = interpolated_price
+                    # interpolated_prob = self.get_prob(testCase_X, interpolated_price)
+                    earnings[(peak_month,weekend)] = interpolated_price * self.prob_lower
+            # process output
             price_suggestion = [prices[self.date_properties[d]] for d in self.dates]
             earning_suggestion = [earnings[self.date_properties[d]] for d in self.dates]
             final_pricing = pd.DataFrame([price_suggestion]).T
-            final_pricing.columns = ['Price']
+            final_pricing.columns = ['Suggested Price']
             final_pricing.index = self.dates
             final_earning = np.sum(earning_suggestion)
         # static
         elif self.dynamic == 0:
             # get max cand_price range
-            for peak_month, weekend in set(self.date_properties.values()): 
+            for peak_month, weekend in set(self.date_properties.values()):
                 lbs, ubs = [], []
                 self.testBase.loc[0,'peak_month'] = peak_month
                 self.testBase.loc[0,'weekend'] = weekend
@@ -176,17 +188,25 @@ class createModel():
             if ub - lb <= 50: cand_price = np.arange(lb,ub+1,1)
             else: cand_price = np.round(np.linspace(lb,ub,50))
             # calculate matrix of earnings (n_date_properties * n_cand_price)
-            dict_earnings = {}
+            dict_prob, dict_earning = {}, {}
             for peak_month, weekend in set(self.date_properties.values()):
                 # update date properties
                 self.testBase.loc[0,'peak_month'] = peak_month
                 self.testBase.loc[0,'weekend'] = weekend
                 testCase_X = self.dataProcessing(self.testBase).loc[[0]]
                 # run grid search
-                dict_earnings[(peak_month,weekend)] = self.grid_search(testCase_X, cand_price, self.prob_lower)
-            matrix_earning = [dict_earnings[self.date_properties[d]] for d in self.dates]
-            final_earning = np.max(np.sum(matrix_earning,axis=0))
-            price_suggestion = cand_price[np.argmax(np.sum(matrix_earning,axis=0))]
+                cand_price, cand_prob, cand_earning = self.grid_search(testCase_X, cand_price, 0)
+                dict_prob[(peak_month,weekend)] = cand_prob
+                dict_earning[(peak_month,weekend)] = cand_earning
+            # process output
+            matrix_prob = [dict_prob[self.date_properties[d]] for d in self.dates]
+            matrix_earning = [dict_earning[self.date_properties[d]] for d in self.dates]
+            if len(np.mean(matrix_prob,axis=0) >= self.prob_lower) > 0:
+                final_earning = np.max(np.sum(matrix_earning,axis=0))
+                price_suggestion = cand_price[np.argmax(np.sum(matrix_earning,axis=0))]
+            else:
+                price_suggestion = int(ub - (self.prob_lower - self.get_prob(testCase_X, lb))/0.01)
+                final_earning = price_suggestion * self.prob_lower * len(self.dates)
             final_pricing = pd.DataFrame([price_suggestion]*len(self.dates))
             final_pricing.columns = ['Suggested Price']
             final_pricing.index = self.dates
