@@ -24,19 +24,30 @@ source my_env/bin/activate
 pip3 install -r requirements.txt
 ```
 
-In order to deactivate the virtual environment, use the following command
+To run our code, navigate into the `webapp` folder unzip the 2 files in the command line:
 
 ```
-deactivate
+unzip cleanData.csv.zip
+unzip rf.sav.zip
 ```
-
-To initialize our webapp, navigate into the `webapp` folder and use the following command:
+After unzipping the files, initialize our webapp by using the following command:
 ```
 python3 app.py
 ```
 
 After the page has been completely initialized, the terminal will return the following line:
 
+```
 Serving on http://0.0.0.0:8080
+```
 
 Open a browser and enter http://0.0.0.0:8080. The page should be sucessfully displayed.
+
+
+Finally, in order to deactivate the virtual environment, use the following command
+
+```
+deactivate
+```
+
+
