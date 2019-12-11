@@ -13,7 +13,7 @@ d3.csv("../static/data/unigram.csv", function(data){
     createCloud();
 });
 
-filtered_words = ["we", "great", "place","stay", "location", "apartment", "clean", "nice", "room", "boston", "easy", "everything", "close", "good", "us", "recommend", "really", "definitely", "walk", "perfect", "comfortable", "house", "host", "well", "super", "time", "clean,", "highly", "space", "they", "home", "staying", "walking", "like", "made", "check", "wonderful", "quiet", "again", "back", "even", "bed"]
+filtered_words = [ "location", "apartment", "clean", "nice", "room", "boston", "easy", "everything", "close", "good", "recommend", "walk", "perfect", "comfortable", "house", "host", "well", "super", "time", "highly", "space",  "home", "staying", "walking", "like", "made", "check", "wonderful", "quiet", "again", "back", "bed"]
 
 function createCloud(){
     var layout = d3.layout.cloud()
