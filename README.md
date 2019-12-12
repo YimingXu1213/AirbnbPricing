@@ -1,5 +1,6 @@
 # Home.PI (MIT 6.S080 Final Project)
-Hi there, this is the repository for Home.PI, A friendly Pricing Intelligence for Airbnb Hosts. 
+Hi there, this is the repository for Home.PI, A friendly Pricing Intelligence for Airbnb Hosts. Check and see our demo below:
+[![Watch the video](https://raw.githubusercontent.com/YimingXu1213/playground/master/frontPage.png)](https://www.youtube.com/watch?v=89C3MUApXXg)
 
 
 
